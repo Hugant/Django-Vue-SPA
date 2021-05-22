@@ -1,0 +1,13 @@
+<settings>
+  <workpath auto="true" type="str" verify="true">
+    articles_storage/
+  </workpath>
+  <categories auto="true" type="list" verify="true">
+    <item type="str">
+      1 категория
+    </item>
+    <item type="str">
+      2 категория
+    </item>
+  </categories>
+</settings>

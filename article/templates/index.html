@@ -1,0 +1,175 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Статьи</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/style.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+</head>
+
+<body>
+  <div class="data-table-area">
+    <div id="startapp">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="data-table-list">
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <div class="modals-list mg-t-30">
+                    <div class="modals-single">
+                      <div class="modals-default-cl">
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addArticle">
+													Добавить статью</button>
+                        <div class="modal fade" id="addArticle" role="dialog">
+                          <div class="modal-dialog modals-default">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h2>Добавление статьи</h2>
+                              </div>
+
+                              <div class="modal-body">
+                                <form v-on:submit.prevent="addArticle">
+                                  <div class="form-group">
+                                    <label for="article_title">Название</label>
+                                    <input type="text" class="form-control" placeholder="Название статьи"
+                                      v-model="newArticle.title">
+                                  </div>
+
+																	<div class="form-group">
+																		<label for="category">Категория</label>
+                                    <input type="text" class="form-control" placeholder="Категория"
+                                      v-model="newArticle.category">
+																	</div>
+
+																	<div class="form-group">
+																		<label for="authors">Авторы (Укажите ФИО, каждого автора через ', '</label>
+																		<input type="text" class="form-control" placeholder="Фролов Иван Русланович, Изняк Игорь Сергеевич"
+                                      v-model="newArticle.authors">
+																	</div>
+
+                                  <div class="form-group">
+                                    <label for="article-body">Текст статьи</label>
+                                    <textarea name="" id="" cols="30" rows="10" class="form-control"
+                                      v-model="newArticle.text"></textarea>
+                                  </div>
+                                  <button type="submit" class="btn btn-success">Сохранить</button>
+                                  <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="modals-default-cl">
+
+                        <div class="modal fade" id="editArticleModal" role="dialog">
+                          <div class="modal-dialog modals-default">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h2>Изменить статью</h2>
+                              </div>
+
+                              <div class="modal-body">
+
+                                <form v-on:submit.prevent="updateArticle">
+                                  <div class="form-group">
+                                    <label for="title">Название статьи</label>
+                                    <input type="text" class="form-control" placeholder="Название статьи"
+                                      v-model="currentArticle.title">
+                                  </div>
+
+																	<div class="form-group">
+																		<label for="category">Категория</label>
+                                    <input type="text" class="form-control" placeholder="Категория"
+                                      v-model="currentArticle.category">
+																	</div>
+
+																	<div class="form-group">
+																		<label for="authors">Авторы (Укажите ФИО, каждого автора через ', '</label>
+																		<input type="text" class="form-control" placeholder="Фролов Иван Русланович, Изняк Игорь Сергеевич"
+                                      v-model="currentArticle.authors">
+																	</div>
+
+                                  <div class="form-group">
+                                    <label for="article-body">Текст статьи</label>
+                                    <textarea name="" id="" cols="30" rows="10" class="form-control"
+                                      v-model="currentArticle.text"></textarea>
+                                  </div>
+                                  <button type="submit" class="btn btn-success">Сохранить</button>
+                                  <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Название статьи</th>
+											<th>Категория</th>
+                      <th>Текст статьи</th>
+											<th>Дата создания / изменения</th>
+											<th>Авторы</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="article in paginatedData" :key="article.id">
+                      <td>${ article.id }</td>
+											<td>${ article.title }</td>
+											<td>${ article.category }</td>
+                      <td>${ article.text }</td>
+											<td>${ article.creation_date } / ${ article.modified_date }</td>
+											<td>
+												<p v-for="author in article.authors">
+													${ author.last_name }
+												</p>
+											</td>
+                      <td><button class="btn btn-primary btn-round" v-on:click="getArticle(article.id)">Изменить</button>
+                      </td>
+                      <td><button class="btn btn-danger btn-round"
+                          v-on:click="deleteArticle(article.id)">Удалить</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+						</div>
+						<div>
+							<button class="btn btn-primary" v-on:click="prevPage()" :disabled='pageNumber==0'>Предыдущая страница</button>
+							<button class="btn btn-primary" v-on:click="nextPage()" :disabled='pageNumber >= pageCount -1'>Следующая страница</button>
+						</div>
+					</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'assets/js/vendor/jquery-1.12.4.min.js' %}"></script>
+  <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+
+  <script src="{% static 'assets/js/vue.js' %}"></script>
+  <script src="{% static 'assets/js/axios.min.js' %}"></script>
+
+  <script src="{% static 'assets/main.js' %}"></script>
+</body>
+</html>

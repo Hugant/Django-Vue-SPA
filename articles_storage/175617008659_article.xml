@@ -1,0 +1,19 @@
+<doc>
+	<title auto="true" type="str" verify="true">
+		СТатья 6
+	</title>
+	<category auto="true" type="str" verify="true">
+		фыва
+	</category>
+	<authors auto="true" type="list" verify="true">
+		<item type="str">
+			В Ы Ф
+		</item>
+	</authors>
+	<date auto="true" type="str" verify="true">
+		22-05-21 / 22-05-21
+	</date>
+	<text auto="true" type="str" verify="true">
+		фыафываыфваыфва
+	</text>
+</doc>
