@@ -21,7 +21,12 @@ let startapp = new Vue({
       'text': '',
       'authors': null,
       'creation_date': null,
-      'modified_date': null}
+      'modified_date': null
+    },
+    categories: [
+      {text: 'F', value:'f'},
+      {text: 'D', value:'d'},
+    ]
   },
 
   computed: {
@@ -36,6 +41,15 @@ let startapp = new Vue({
 
   mounted() {
     this.getArticles();
+
+    this.loading = true;
+    axios.get('/categories/').then((response) => {
+      this.categories = JSON.parse(response.data);
+      this.loading = false;
+    }).catch((err) => {
+      this.loading = false;
+      console.log(err)
+    })
   },
 
   methods: {

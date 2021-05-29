@@ -67,7 +67,7 @@ def add_article(request):
 	authors = []
 	for author in data['authors']:
 		authors.append(Author(author['last_name'], author['first_name'], author['middle_name']))
-	article = avm.add_article(data['title'], data['category'], authors , data['text'])
+	article = avm.add_article(data['title'], data['category'], authors, data['text'])
 	authors = []
 	for author in article.authors:
 		authors.append({
@@ -91,7 +91,10 @@ def add_article(request):
 def edit_article(request, article_id):
 	data = json.loads(request.body)
 	article = avm.get_article(int(article_id))
-	article.modify(data['title'], data['category'], data['authors'], data['text'])
+	authors =[]
+	for author in data['authors']:
+		authors.append(Author(author['last_name'], author['first_name'], author['middle_name']))
+	article.modify(data['title'], data['category'], authors, data['text'])
 
 	article = avm.get_article(int(article_id))
 	authors = []
@@ -117,3 +120,11 @@ def edit_article(request, article_id):
 def delete_article(request, article_id):
 	avm.remove_article(article_id)
 	return response.JsonResponse(json.dumps([]), safe=False)
+
+
+def categories(request):
+	categories = []
+	for category in avm.get_categories():
+		categories.append({'text': category.capitalize(), 'value': category})
+
+	return response.JsonResponse(json.dumps(categories), safe=False)

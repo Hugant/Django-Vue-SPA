@@ -13,9 +13,10 @@ class ArticlesVirtualManager:
 	@staticmethod
 	def __read_settings(settings_filename):
 		settings_node = xml.parse(settings_filename).getroot()
-		# categories = []
-		# for category in settings_node.find('')
-		return settings_node.find('workpath').text.strip(), None
+		categories = []
+		for category in settings_node.find('categories'):
+			categories.append(category.text.strip())
+		return settings_node.find('workpath').text.strip(), categories
 
 	def __read_articles(self):
 		article_files = os.listdir(self.storage_filepath)
@@ -25,6 +26,9 @@ class ArticlesVirtualManager:
 			articles.append(Article(filepath=article_file, storage_filepath=self.storage_filepath))
 
 		return articles
+
+	def get_categories(self):
+		return self.categories
 
 	def get_articles(self):
 		return self.articles
@@ -183,6 +187,7 @@ class Article:
 		authors_node = root.find('authors')
 		authors_node.tail = '\n\t'
 		authors_node.text = '\n\t\t'
+
 		for author, i in zip(self.authors, range(len(self.authors))):
 			author_node = xml.SubElement(authors_node, 'item')
 			author_node.set('type', 'str')
